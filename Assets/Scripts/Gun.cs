@@ -10,6 +10,8 @@ public class Gun : MonoBehaviour {
 
     public GameObject end, start; // The gun start and end point
     public GameObject gun;
+    public GameObject end1, start1; // The handgun start and end point
+    public GameObject gun1;
     public Animator animator;
     
     public GameObject spine;
@@ -37,9 +39,14 @@ public class Gun : MonoBehaviour {
     public GameObject muzzleFlash;
     public GameObject shotSound;
 
+    public bool isShortGun;
+
     // Use this for initialization
     void Start() {
         headMesh.GetComponent<SkinnedMeshRenderer>().enabled = false; // Hiding player character head to avoid bugs :)
+        isShortGun = false;
+        gun.SetActive(true);
+        gun1.SetActive(false);
     }
 
     // Update is called once per frame
@@ -86,6 +93,22 @@ public class Gun : MonoBehaviour {
             gunReloadTime = 2.5f;
             Invoke("reloaded", 2.0f);
         }
+        else if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Q))) // Switch weapon
+        {
+            animator.SetBool("switchGun", true);
+            if (isShortGun) 
+            {
+                gun.SetActive(true);
+                gun1.SetActive(false);
+            }
+            else 
+            {
+                gun.SetActive(false);
+                gun1.SetActive(true);
+            }
+            isShortGun = !isShortGun;
+            Invoke("switched", 1.5f);
+        }
         else
         {
             animator.SetBool("reload", false);
@@ -106,6 +129,9 @@ public class Gun : MonoBehaviour {
             GetComponent<Animator>().SetBool("dead", true);
             GetComponent<CharacterMovement>().isDead = true;
             headMesh.GetComponent<SkinnedMeshRenderer>().enabled = true;
+
+            print("Game will restart in 10 seconds");
+            Invoke("restart", 10.0f); // Restart after 10s
         }
     }
 
@@ -195,9 +221,7 @@ public class Gun : MonoBehaviour {
     {
         if (col.gameObject.tag == "door") 
         {
-            // print("Open door");
-            // GetComponent<Animator>().SetBool("open", true);
-            // GetComponent<Animator>().SetTrigger("openDoor");
+            print("Game will restart in 10 seconds");
             Invoke("restart", 10.0f); // Restart after 10s
         }
         else if (col.gameObject.tag == "ammo")
@@ -211,5 +235,10 @@ public class Gun : MonoBehaviour {
     {
         SceneManager.LoadScene(0);
         print("Game restart");
+    }
+
+    void switched()
+    {
+        animator.SetBool("switchGun", false);
     }
 }

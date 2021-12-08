@@ -10,6 +10,7 @@ TagManager:
   - enemy_chest
   - enemy_head
   - door
+  - ammo
   layers:
   - Default
   - TransparentFX

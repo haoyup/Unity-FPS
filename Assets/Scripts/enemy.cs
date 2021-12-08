@@ -6,7 +6,7 @@ public class enemy : MonoBehaviour
 {
     public Animator animator;
     public GameObject[] targets;
-    int index = 0;
+    public int index = 0;
     public GameObject player;
     public bool find_player = false;
     public bool being_shot = false;
@@ -19,6 +19,8 @@ public class enemy : MonoBehaviour
     public float health = 100;
     public GameObject gun;
     public GameObject gun_ray;
+    public GameObject[] hidePaths;
+    public float hideTime = 10.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +44,24 @@ public class enemy : MonoBehaviour
                 {
                     find_player = true;
                 }
+
+                // if (hidePaths != null && hideTime > 5.0f)
+                // {
+                //     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(hidePaths[0].transform.position - transform.position), Time.deltaTime);
+                //     if (Vector3.Distance(hidePaths[0].transform.position, transform.position) <= 0.5f)
+                //     {
+                //         hideTime = 0.0f;
+                //     }
+                // }
+                // else if (hidePaths != null && hideTime > 2.0f && hideTime < 5.0f && Vector3.Distance(hidePaths[1].transform.position, transform.position) >= 0.5f)
+                // {
+                //     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(hidePaths[1].transform.position - transform.position), Time.deltaTime);
+                // }
+                // else
+                // {
                 // Turn to player and aim the player
                 Vector3 aim_player_pos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(aim_player_pos - transform.position), Time.deltaTime*0.5f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(aim_player_pos - transform.position), Time.deltaTime*2.5f);
                 
                 // Fire in 10 meters
                 if (Vector3.Distance(transform.position, player.transform.position) <= 10.0f)
@@ -63,6 +80,8 @@ public class enemy : MonoBehaviour
                 {
                     GetComponent<Animator>().SetBool("fire", false); 
                 }
+                // }
+                // hideTime += Time.deltaTime;
             }
             else if (Vector3.Distance(transform.position, player.transform.position) > 11.0f || being_shot == false)
             {

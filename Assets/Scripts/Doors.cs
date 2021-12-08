@@ -16,7 +16,6 @@ public class Doors : MonoBehaviour
         if (col.gameObject.tag == "Player") 
         {
             print("Open door");
-            // GetComponent<Animator>().SetBool("open", true);
             animator.SetTrigger("openDoor");
         }
     }
